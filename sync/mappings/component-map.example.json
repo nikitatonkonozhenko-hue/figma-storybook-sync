@@ -1,0 +1,44 @@
+{
+  "$schema": "./component-map.schema.json",
+  "storybookProject": "your-storybook",
+  "components": [
+    {
+      "figmaComponent": "Button",
+      "figmaVariantAxes": {
+        "Type": {
+          "Primary": "primary",
+          "Secondary": "secondary",
+          "Ghost": "ghost"
+        },
+        "Size": {
+          "Small": "sm",
+          "Medium": "md",
+          "Large": "lg"
+        }
+      },
+      "storybook": {
+        "id": "components-button--playground",
+        "propMap": {
+          "variant": "Type",
+          "size": "Size"
+        }
+      }
+    },
+    {
+      "figmaComponent": "Input",
+      "figmaVariantAxes": {
+        "State": {
+          "Default": "default",
+          "Error": "error",
+          "Success": "success"
+        }
+      },
+      "storybook": {
+        "id": "components-input--playground",
+        "propMap": {
+          "status": "State"
+        }
+      }
+    }
+  ]
+}

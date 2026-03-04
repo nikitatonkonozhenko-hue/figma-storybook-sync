@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FigmaToStorybookComponentMap",
+  "type": "object",
+  "required": [
+    "storybookProject",
+    "components"
+  ],
+  "properties": {
+    "storybookProject": {
+      "type": "string"
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "figmaComponent",
+          "figmaVariantAxes",
+          "storybook"
+        ],
+        "properties": {
+          "figmaComponent": {
+            "type": "string"
+          },
+          "figmaVariantAxes": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          "storybook": {
+            "type": "object",
+            "required": [
+              "id",
+              "propMap"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "propMap": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

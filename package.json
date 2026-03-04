@@ -1,0 +1,17 @@
+{
+  "name": "figma-storybook-sync",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Prototype + Figma visual comparison checks",
+  "scripts": {
+    "generate:usecases": "node scripts/generate-usecase-config.mjs",
+    "test:visual": "node tests/visual/figma-compare.mjs",
+    "autofix:visual": "node scripts/autofix-visual.mjs",
+    "new:prototype": "node scripts/create-prototype.mjs"
+  },
+  "devDependencies": {
+    "pixelmatch": "^5.3.0",
+    "playwright": "^1.52.0",
+    "pngjs": "^7.0.0"
+  }
+}

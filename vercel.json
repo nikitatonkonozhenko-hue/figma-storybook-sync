@@ -1,0 +1,10 @@
+{
+  "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/prototype",
+      "destination": "/prototype/",
+      "permanent": true
+    }
+  ]
+}

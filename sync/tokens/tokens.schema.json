@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DesignTokens",
+  "type": "object",
+  "required": [
+    "color",
+    "spacing",
+    "typography",
+    "radius"
+  ],
+  "properties": {
+    "color": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "spacing": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "typography": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "radius": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}

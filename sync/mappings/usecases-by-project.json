@@ -1,0 +1,49 @@
+{
+  "rightColumnIconUrl": "https://www.figma.com/api/mcp/asset/b4dd2c59-b6d2-46ba-8531-90eeb48d16b8",
+  "projectTypeOptions": [
+    {
+      "id": "financial-transaction",
+      "title": "Financial transaction",
+      "description": "Deals with the monetary exchange of services or goods"
+    },
+    {
+      "id": "long-term-repository",
+      "title": "Long-term repository",
+      "description": "Internal or external document sharing beetween involved parties"
+    },
+    {
+      "id": "assets-management",
+      "title": "Assets management",
+      "description": "Collaboration on physical, financial, and intellectual assets"
+    }
+  ],
+  "useCaseOptionsByProject": {
+    "financial-transaction": [
+      { "id": "ma-sell-side", "title": "M&A sell side" },
+      { "id": "debt-financing", "title": "Debt financing" },
+      { "id": "ma-buy-side", "title": "M&A buy side" },
+      { "id": "bankruptcy", "title": "Bankruptcy" },
+      { "id": "fundraising", "title": "Fundraising" },
+      { "id": "tendering", "title": "Tendering" },
+      { "id": "ipo-exits", "title": "IPO & exits" },
+      { "id": "licensing", "title": "Licensing" },
+      { "id": "strategic-partnership", "title": "Strategic partnership" }
+    ],
+    "long-term-repository": [
+      { "id": "internal-document-repository", "title": "Internal document repository" },
+      { "id": "clinical-trials", "title": "Clinical trials" },
+      { "id": "corporate-reporting", "title": "Corporate reporting" },
+      { "id": "audit", "title": "Audit" },
+      { "id": "investor-reporting", "title": "Investor reporting" },
+      { "id": "accounting", "title": "Accounting" },
+      { "id": "board-communications", "title": "Board communications" },
+      { "id": "legal-extranet", "title": "Legal extranet" }
+    ],
+    "assets-management": [
+      { "id": "intellectual-property", "title": "Intellectual property" },
+      { "id": "portfolio-management", "title": "Portfolio management" },
+      { "id": "real-estate", "title": "Real estate" },
+      { "id": "other", "title": "Other" }
+    ]
+  }
+}

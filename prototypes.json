@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Usecase selector",
+    "status": "active",
+    "folder": "prototype/",
+    "href": "/prototype/",
+    "notes": "Variant 1 + Variant 2"
+  },
+  {
+    "name": "Owner change verification flow",
+    "status": "draft",
+    "folder": "verification-flow/",
+    "href": "/verification-flow/",
+    "notes": ""
+  }
+]

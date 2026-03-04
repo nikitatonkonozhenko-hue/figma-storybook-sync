@@ -1,0 +1,226 @@
+[
+  {
+    "name": "Accordion",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=accordion"
+  },
+  {
+    "name": "Avatar",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=avatar"
+  },
+  {
+    "name": "Badge",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=badge"
+  },
+  {
+    "name": "Block UI",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=block-ui"
+  },
+  {
+    "name": "Button",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=button"
+  },
+  {
+    "name": "Bullet",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=bullet"
+  },
+  {
+    "name": "Calendar",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=calendar"
+  },
+  {
+    "name": "Carousel",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=carousel"
+  },
+  {
+    "name": "Card",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=card"
+  },
+  {
+    "name": "Chart",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=chart"
+  },
+  {
+    "name": "Checkbox",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=checkbox"
+  },
+  {
+    "name": "Chip",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=chip"
+  },
+  {
+    "name": "Chips",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=chips"
+  },
+  {
+    "name": "Colors",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=colors"
+  },
+  {
+    "name": "Confirm dialog",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=confirm-dialog"
+  },
+  {
+    "name": "Date",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=date"
+  },
+  {
+    "name": "Datepicker",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=datepicker"
+  },
+  {
+    "name": "Dialog",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=dialog"
+  },
+  {
+    "name": "Drag select",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=drag-select"
+  },
+  {
+    "name": "File Upload",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=file-upload"
+  },
+  {
+    "name": "Highlight text",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=highlight-text"
+  },
+  {
+    "name": "Icons",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=icons"
+  },
+  {
+    "name": "Illustration",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=illustration"
+  },
+  {
+    "name": "Input Mask",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=input-mask"
+  },
+  {
+    "name": "Input Number",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=input-number"
+  },
+  {
+    "name": "Input Phone",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=input-phone"
+  },
+  {
+    "name": "Input Text",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=input-text"
+  },
+  {
+    "name": "Logo",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=logo"
+  },
+  {
+    "name": "Mentions",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=mentions"
+  },
+  {
+    "name": "Message",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=message"
+  },
+  {
+    "name": "Overlay Panel",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=overlay-panel"
+  },
+  {
+    "name": "Page Placeholder",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=page-placeholder"
+  },
+  {
+    "name": "Password",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=password"
+  },
+  {
+    "name": "Paste emails only",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=paste-emails-only"
+  },
+  {
+    "name": "Progress bar",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=progress-bar"
+  },
+  {
+    "name": "Radio Button",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=radio-button"
+  },
+  {
+    "name": "Radio Button Tiles",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=radio-button-tiles"
+  },
+  {
+    "name": "Role Selector",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=role-selector"
+  },
+  {
+    "name": "Search",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=search"
+  },
+  {
+    "name": "Select",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=select"
+  },
+  {
+    "name": "Select tile",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=select-tile"
+  },
+  {
+    "name": "Signature Pad",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=signature-pad"
+  },
+  {
+    "name": "Skeleton",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=skeleton"
+  },
+  {
+    "name": "Slider",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=slider"
+  },
+  {
+    "name": "Stepper",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=stepper"
+  },
+  {
+    "name": "Table",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=table"
+  },
+  {
+    "name": "Tabs",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=tabs"
+  },
+  {
+    "name": "Tag",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=tag"
+  },
+  {
+    "name": "Textarea",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=textarea"
+  },
+  {
+    "name": "Timezone Select",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=timezone-select"
+  },
+  {
+    "name": "Toast",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=toast"
+  },
+  {
+    "name": "Toggle",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=toggle"
+  },
+  {
+    "name": "Tooltip",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=tooltip"
+  },
+  {
+    "name": "Tree select",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=tree-select"
+  },
+  {
+    "name": "Typography",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=typography"
+  },
+  {
+    "name": "User",
+    "url": "https://storybook-fvdr-frontend.qa.stagevdr.com/?c=user"
+  }
+]

@@ -1,0 +1,1069 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Owner change verification flow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --stone-0: #ffffff;
+        --stone-1000: #1f2129;
+        --stone-900: #40424b;
+        --stone-700: #5f616a;
+        --stone-500: #bbbdc8;
+        --stone-300: #eceef9;
+        --stone-200: #f7f7f7;
+        --divider: #dee0eb;
+        --accent-500: #2c9c74;
+        --accent-50: #e8f5ef;
+        --danger-600: #e54430;
+        --warning-highlight: #fff6c3;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--stone-0);
+        color: var(--stone-1000);
+        font-family: "Open Sans", sans-serif;
+      }
+
+      .app {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        min-height: 100vh;
+      }
+
+      .leftgard {
+        background: var(--stone-200);
+        border-right: 1px solid var(--divider);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .project-frame {
+        align-items: center;
+        border-bottom: 1px solid var(--divider);
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 16px;
+      }
+
+      .project-name {
+        align-items: center;
+        display: flex;
+        gap: 16px;
+      }
+
+      .project-badge {
+        align-items: center;
+        background: #084d4b;
+        border-radius: 4px;
+        display: inline-flex;
+        height: 40px;
+        justify-content: center;
+        width: 40px;
+      }
+
+      .project-title {
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 24px;
+      }
+
+      .menu {
+        display: grid;
+        gap: 0;
+        margin-top: 24px;
+      }
+
+      .menu-item {
+        align-items: center;
+        color: var(--stone-900);
+        display: grid;
+        grid-template-columns: 72px 1fr;
+        min-height: 40px;
+        padding-right: 24px;
+        transition: background-color 120ms ease;
+      }
+
+      .menu-item .label {
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+      }
+
+      .menu-item.active .label {
+        color: var(--stone-1000);
+        font-weight: 600;
+      }
+
+      .menu-item:not(.active):hover {
+        background: #f0f1f5;
+      }
+
+      .menu-icon-slot {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+      }
+
+      .menu-footer {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        padding: 24px 16px 24px 24px;
+      }
+
+      .logo {
+        align-items: center;
+        display: inline-flex;
+        font-size: 42px;
+        font-weight: 700;
+        letter-spacing: -0.04em;
+        line-height: 24px;
+      }
+
+      .midgard {
+        display: grid;
+        grid-template-rows: 64px 1fr;
+      }
+
+      .topbar {
+        align-items: center;
+        border-bottom: 1px solid var(--divider);
+        display: flex;
+        justify-content: space-between;
+        padding: 0 24px 0 16px;
+      }
+
+      .topbar-title {
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 28px;
+      }
+
+      .topbar-icons {
+        align-items: center;
+        color: var(--stone-700);
+        display: flex;
+        gap: 24px;
+      }
+
+      .avatar {
+        align-items: center;
+        background: var(--stone-300);
+        border-radius: 40px;
+        color: var(--stone-1000);
+        display: inline-flex;
+        font-size: 16px;
+        height: 40px;
+        justify-content: center;
+        line-height: 24px;
+        width: 40px;
+      }
+
+      .main {
+        padding: 24px;
+      }
+
+      .main-inner {
+        width: 1112px;
+      }
+
+      .title-row {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 24px;
+      }
+
+      .title-left {
+        align-items: center;
+        display: flex;
+        gap: 16px;
+      }
+
+      .account-title {
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 28px;
+      }
+
+      .id-block {
+        align-items: center;
+        color: var(--stone-700);
+        display: inline-flex;
+        font-size: 14px;
+        gap: 8px;
+        line-height: 20px;
+      }
+
+      .status-chip {
+        align-items: center;
+        background: var(--accent-50);
+        border-radius: 16px;
+        color: #1f7a5a;
+        display: inline-flex;
+        gap: 8px;
+        height: 28px;
+        padding: 6px 12px;
+      }
+
+      .status-chip span {
+        font-size: 14px;
+        line-height: 20px;
+      }
+
+      .edit-btn {
+        align-items: center;
+        background: var(--stone-0);
+        border: 1px solid var(--stone-500);
+        border-radius: 4px;
+        color: var(--stone-900);
+        cursor: pointer;
+        display: inline-flex;
+        gap: 8px;
+        height: 40px;
+        padding: 0 16px;
+        transition:
+          background-color 120ms ease,
+          border-color 120ms ease,
+          box-shadow 120ms ease,
+          color 120ms ease;
+      }
+
+      .edit-btn span {
+        font-size: 15px;
+        line-height: 16px;
+      }
+
+      .warning-card {
+        border: 1px solid var(--divider);
+        border-radius: 4px;
+        display: grid;
+        grid-template-columns: 72px 1fr;
+        margin-bottom: 16px;
+        width: 100%;
+        max-width: 733px;
+        overflow: hidden;
+      }
+
+      .warning-strip {
+        align-items: center;
+        background: var(--warning-highlight);
+        display: flex;
+        justify-content: center;
+      }
+
+      .warning-body {
+        padding: 24px;
+      }
+
+      .warning-title {
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 24px;
+        margin: 0 0 12px;
+      }
+
+      .changes {
+        display: grid;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      .kv {
+        align-items: center;
+        column-gap: 8px;
+        display: grid;
+        grid-template-columns: 160px 1fr;
+      }
+
+      .kv strong {
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 20px;
+      }
+
+      .kv span {
+        font-size: 14px;
+        line-height: 20px;
+      }
+
+      .add-resolution {
+        background: none;
+        border: 0;
+        color: var(--accent-500);
+        cursor: pointer;
+        font-size: 15px;
+        line-height: 16px;
+        margin: 0 0 16px;
+        padding: 0;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+        transition: color 120ms ease;
+      }
+
+      .resolution-block {
+        margin: 0 0 16px;
+        max-width: 435px;
+      }
+
+      .resolution-label {
+        display: inline-flex;
+        font-size: 14px;
+        font-weight: 600;
+        gap: 4px;
+        line-height: 20px;
+        margin-bottom: 4px;
+      }
+
+      .resolution-label span {
+        color: var(--stone-700);
+        font-weight: 400;
+      }
+
+      .resolution-input {
+        border: 1px solid var(--stone-500);
+        border-radius: 2px;
+        color: var(--stone-1000);
+        display: block;
+        font-family: inherit;
+        font-size: 15px;
+        line-height: 20px;
+        min-height: 64px;
+        outline: none;
+        padding: 8px 10px;
+        resize: none;
+        transition:
+          border-color 120ms ease,
+          box-shadow 120ms ease;
+        width: 100%;
+      }
+
+      .resolution-input:hover {
+        border-color: #9ea3b4;
+      }
+
+      .resolution-input::placeholder {
+        color: #8a8e9b;
+      }
+
+      .resolution-input.is-error,
+      .resolution-input[aria-invalid="true"] {
+        border-color: var(--danger-600);
+      }
+
+      .counter {
+        color: #8a8e9b;
+        font-size: 12px;
+        line-height: 16px;
+        margin-top: 4px;
+      }
+
+      .actions {
+        display: flex;
+        gap: 12px;
+      }
+
+      .btn {
+        border: 0;
+        border-radius: 4px;
+        color: #fff;
+        cursor: pointer;
+        display: inline-flex;
+        font-size: 15px;
+        height: 40px;
+        align-items: center;
+        justify-content: center;
+        line-height: 16px;
+        padding: 0 16px;
+        transition:
+          background-color 120ms ease,
+          box-shadow 120ms ease,
+          transform 80ms ease;
+      }
+
+      .btn.reject {
+        background: var(--danger-600);
+      }
+
+      .btn.approve {
+        background: var(--accent-500);
+      }
+
+      .btn:disabled,
+      .edit-btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.56;
+      }
+
+      @media (hover: hover) {
+        .edit-btn:hover {
+          background: #f8f9fc;
+          border-color: #9ea3b4;
+        }
+
+        .btn.reject:hover:not(:disabled) {
+          background: #cf3e2b;
+        }
+
+        .btn.approve:hover:not(:disabled) {
+          background: #1c8269;
+        }
+
+        .add-resolution:hover {
+          color: #1c8269;
+        }
+      }
+
+      .btn:active:not(:disabled) {
+        transform: translateY(1px);
+      }
+
+      .edit-btn:active {
+        background: #f0f1f5;
+      }
+
+      .btn:focus-visible,
+      .edit-btn:focus-visible,
+      .add-resolution:focus-visible,
+      .resolution-input:focus-visible {
+        box-shadow: 0 0 0 2px rgba(44, 156, 116, 0.24);
+        outline: none;
+      }
+
+      .resolution-input:focus-visible {
+        border-color: var(--accent-500);
+      }
+
+      .metrics {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin-bottom: 16px;
+      }
+
+      .metric {
+        border: 1px solid var(--divider);
+        border-radius: 4px;
+        min-height: 120px;
+        padding: 16px;
+      }
+
+      .metric-name {
+        font-size: 16px;
+        line-height: 24px;
+        margin: 0 0 4px;
+      }
+
+      .metric-value {
+        font-size: 36px;
+        font-weight: 700;
+        line-height: 44px;
+        margin: 0 0 4px;
+      }
+
+      .metric-sub {
+        color: var(--stone-700);
+        font-size: 12px;
+        line-height: 16px;
+      }
+
+      .grid-bottom {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: 1fr 2fr;
+      }
+
+      .panel {
+        border: 1px solid var(--divider);
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .panel-head {
+        align-items: center;
+        background: #f5f5f5;
+        display: flex;
+        font-size: 16px;
+        font-weight: 600;
+        justify-content: space-between;
+        line-height: 24px;
+        padding: 12px;
+      }
+
+      .history-filters {
+        align-items: center;
+        color: var(--accent-500);
+        display: inline-flex;
+        font-size: 14px;
+        font-weight: 400;
+        gap: 12px;
+        line-height: 20px;
+      }
+
+      .details-row {
+        align-items: center;
+        display: grid;
+        gap: 12px;
+        grid-template-columns: 28px 1fr;
+        min-height: 40px;
+        padding: 8px 12px;
+      }
+
+      .details-row .icon-cell {
+        align-items: center;
+        background: #f5f5f5;
+        border-radius: 4px;
+        display: inline-flex;
+        height: 28px;
+        justify-content: center;
+        width: 28px;
+      }
+
+      .details-title {
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 20px;
+      }
+
+      .details-sub {
+        color: var(--stone-700);
+        font-size: 14px;
+        line-height: 20px;
+      }
+
+      .history-row {
+        align-items: center;
+        display: grid;
+        gap: 16px;
+        grid-template-columns: 96px 1fr auto;
+        min-height: 56px;
+        padding: 8px 12px;
+      }
+
+      .history-date {
+        font-size: 14px;
+        line-height: 20px;
+      }
+
+      .history-main {
+        align-items: center;
+        display: grid;
+        gap: 12px;
+        grid-template-columns: 28px 1fr;
+      }
+
+      .history-icon {
+        align-items: center;
+        background: #f1f2f8;
+        border-radius: 4px;
+        display: inline-flex;
+        height: 28px;
+        justify-content: center;
+        width: 28px;
+      }
+
+      .history-title {
+        font-size: 14px;
+        line-height: 20px;
+      }
+
+      .history-sub {
+        color: var(--stone-700);
+        font-size: 12px;
+        line-height: 16px;
+      }
+
+      .status-flow {
+        align-items: center;
+        display: inline-flex;
+        gap: 8px;
+      }
+
+      .status-pill {
+        align-items: center;
+        border-radius: 999px;
+        display: inline-flex;
+        font-size: 14px;
+        gap: 6px;
+        line-height: 20px;
+        padding: 4px 12px;
+      }
+
+      .status-pill.active {
+        background: #e8f5ef;
+        color: #1f7a5a;
+      }
+
+      .status-pill.closed {
+        background: #f1f2f6;
+        color: #5f616a;
+      }
+
+      .status-pill.frozen {
+        background: #eceffd;
+        color: #4f5ab7;
+      }
+
+      .status-pill.hold {
+        background: #ffeceb;
+        color: #be3a2c;
+      }
+
+      .icon-16 {
+        height: 16px;
+        width: 16px;
+      }
+
+      .icon-24 {
+        height: 24px;
+        width: 24px;
+      }
+
+      .muted-icon {
+        color: var(--stone-700);
+      }
+
+      .accent-icon {
+        color: var(--accent-500);
+      }
+
+      @media (max-width: 1400px) {
+        .main-inner {
+          width: 100%;
+        }
+
+        .metrics {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 1240px) {
+        .app {
+          grid-template-columns: 1fr;
+        }
+
+        .leftgard {
+          display: none;
+        }
+
+        .main {
+          overflow-x: auto;
+        }
+
+        .grid-bottom {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .topbar {
+          padding: 0 16px;
+        }
+
+        .topbar-icons {
+          gap: 14px;
+        }
+
+        .main {
+          padding: 16px;
+        }
+
+        .title-row {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .title-left {
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+
+        .warning-card {
+          grid-template-columns: 56px 1fr;
+        }
+
+        .warning-body {
+          padding: 16px;
+        }
+
+        .resolution-block {
+          max-width: 100%;
+        }
+
+        .metrics {
+          grid-template-columns: 1fr;
+        }
+
+        .history-row {
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
+
+        .status-flow {
+          flex-wrap: wrap;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .kv {
+          grid-template-columns: 1fr;
+          row-gap: 2px;
+        }
+
+        .warning-title {
+          font-size: 15px;
+          line-height: 22px;
+        }
+
+        .actions {
+          width: 100%;
+        }
+
+        .btn {
+          flex: 1;
+          justify-content: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="leftgard">
+        <div>
+          <div class="project-frame">
+            <div class="project-name">
+              <div class="project-badge">
+                <svg class="icon-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="8" cy="8" r="6" stroke="#4EA59A" stroke-width="2" />
+                  <circle cx="8" cy="8" r="2" fill="#4EA59A" />
+                </svg>
+              </div>
+              <div class="project-title">Account name</div>
+            </div>
+            <svg class="icon-16 muted-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4.5 6.5L8 10L11.5 6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+
+          <nav class="menu">
+            <div class="menu-item">
+              <div class="menu-icon-slot">
+                <svg class="icon-24 muted-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 7L9.5 12L14.5 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <span class="label">Corporate accounts</span>
+            </div>
+            <div class="menu-item active">
+              <div class="menu-icon-slot">
+                <svg class="icon-24 accent-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="6" height="6" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="4" width="6" height="6" stroke="currentColor" stroke-width="1.8"/><rect x="4" y="14" width="6" height="6" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="14" width="6" height="6" stroke="currentColor" stroke-width="1.8"/></svg>
+              </div>
+              <span class="label">Overview</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon-slot">
+                <svg class="icon-24 muted-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6.5C4 5.67 4.67 5 5.5 5H13l4 4v8.5c0 .83-.67 1.5-1.5 1.5h-10A1.5 1.5 0 014 17.5v-11z" stroke="currentColor" stroke-width="1.6"/><path d="M13 5v4h4" stroke="currentColor" stroke-width="1.6"/></svg>
+              </div>
+              <span class="label">Projects</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon-slot">
+                <svg class="icon-24 muted-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="9" r="2.5" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="8" r="2" stroke="currentColor" stroke-width="1.6"/><path d="M4 18c.6-2.2 2.3-3.3 4-3.3S11.4 15.8 12 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M13 18c.4-1.7 1.7-2.7 3-2.7 1.2 0 2.4.8 3 2.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              </div>
+              <span class="label">Participants</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon-slot">
+                <svg class="icon-24 muted-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 7v10M12 5v14M18 9v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="6" cy="7" r="2" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="9" r="2" stroke="currentColor" stroke-width="1.6"/></svg>
+              </div>
+              <span class="label">Settings</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon-slot">
+                <svg class="icon-24 muted-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="12" cy="6" rx="7" ry="3" stroke="currentColor" stroke-width="1.6"/><path d="M5 6v8c0 1.66 3.13 3 7 3s7-1.34 7-3V6" stroke="currentColor" stroke-width="1.6"/><path d="M5 10c0 1.66 3.13 3 7 3s7-1.34 7-3" stroke="currentColor" stroke-width="1.6"/></svg>
+              </div>
+              <span class="label">Data storage</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-icon-slot">
+                <svg class="icon-24 muted-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 10h14M7 10V8.5A2.5 2.5 0 019.5 6h5A2.5 2.5 0 0117 8.5V10M6 10h12l-1 8H7l-1-8z" stroke="currentColor" stroke-width="1.6"/></svg>
+              </div>
+              <span class="label">Billing</span>
+            </div>
+          </nav>
+        </div>
+
+        <div class="menu-footer">
+          <div class="logo">ideals.</div>
+          <svg class="icon-16 muted-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 4L6 8L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 4L9 8L13 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </aside>
+
+      <section class="midgard">
+        <header class="topbar">
+          <div class="topbar-title">Overview</div>
+          <div class="topbar-icons">
+            <svg class="icon-24 muted-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.8 14.8A6.5 6.5 0 019.2 7.2a6.5 6.5 0 107.6 7.6z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+            <svg class="icon-24 muted-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.7"/><path d="M9.5 9.2a2.5 2.5 0 115 0c0 1.8-2.5 2-2.5 3.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="16.9" r="1" fill="currentColor"/></svg>
+            <svg class="icon-24 muted-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="6" height="6" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="4" width="6" height="6" stroke="currentColor" stroke-width="1.7"/><rect x="4" y="14" width="6" height="6" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="14" width="6" height="6" stroke="currentColor" stroke-width="1.7"/></svg>
+            <span class="avatar">TN</span>
+          </div>
+        </header>
+
+        <main class="main">
+          <div class="main-inner">
+            <div class="title-row">
+              <div class="title-left">
+                <div class="account-title">Account name</div>
+                <svg class="icon-16 muted-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 11.5l-.5 2 2-.5L12.8 4.7a1.2 1.2 0 000-1.7l-.8-.8a1.2 1.2 0 00-1.7 0L3 11.5z" stroke="currentColor" stroke-width="1.3"/><path d="M9.6 3.4l3 3" stroke="currentColor" stroke-width="1.3"/></svg>
+                <div class="id-block">
+                  <span>ID: 221201-812</span>
+                  <svg class="icon-16 muted-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="8" height="8" rx="1.3" stroke="currentColor" stroke-width="1.3"/><rect x="6" y="2" width="8" height="8" rx="1.3" stroke="currentColor" stroke-width="1.3"/></svg>
+                </div>
+                <div class="status-chip">
+                  <svg class="icon-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.8 1.8L4.5 8h2.8L6.8 14.2 11.5 7.8H8.7L8.8 1.8z" fill="#2C9C74"/></svg>
+                  <span>Active</span>
+                </div>
+              </div>
+              <button class="edit-btn" type="button">
+                <svg class="icon-16 muted-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 11.5l-.5 2 2-.5L12.8 4.7a1.2 1.2 0 000-1.7l-.8-.8a1.2 1.2 0 00-1.7 0L3 11.5z" stroke="currentColor" stroke-width="1.3"/><path d="M9.6 3.4l3 3" stroke="currentColor" stroke-width="1.3"/></svg>
+                <span>Edit account</span>
+              </button>
+            </div>
+
+            <section class="warning-card">
+              <div class="warning-strip">
+                <svg class="icon-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 2l6 10.5H2L8 2z" stroke="#9A7F07" stroke-width="1.4"/><path d="M8 6v3.5" stroke="#9A7F07" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="10.8" r="0.9" fill="#9A7F07"/></svg>
+              </div>
+              <div class="warning-body">
+                <h2 class="warning-title">Verify owner update according to changes below</h2>
+
+                <div class="changes">
+                  <div class="kv"><strong>Owner</strong><span>john@domain.com → john@newdomain.com</span></div>
+                  <div class="kv"><strong>Subscription #</strong><span>UK AS 1234</span></div>
+                  <div class="kv"><strong>Plan</strong><span>Trial → Enterprise 25</span></div>
+                </div>
+
+                <button class="add-resolution" id="addResolutionBtn" type="button">Add resolution</button>
+
+                <div class="resolution-block" id="resolutionBlock" hidden>
+                  <label class="resolution-label" for="resolutionInput">Resolution <span>(optional)</span></label>
+                  <textarea
+                    id="resolutionInput"
+                    class="resolution-input"
+                    maxlength="500"
+                    placeholder="Type your message here"
+                  ></textarea>
+                  <div class="counter"><span id="counter">0</span>/500</div>
+                </div>
+
+                <div class="actions">
+                  <button class="btn reject" type="button" id="rejectBtn">Reject</button>
+                  <button class="btn approve" type="button" id="approveBtn">Approve</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="metrics">
+              <article class="metric">
+                <h3 class="metric-name">Active projects</h3>
+                <p class="metric-value">96</p>
+                <div class="metric-sub">120 projects total</div>
+              </article>
+              <article class="metric">
+                <h3 class="metric-name">Used storage</h3>
+                <p class="metric-value">122 GB</p>
+                <div class="metric-sub">Across all active projects</div>
+              </article>
+              <article class="metric">
+                <h3 class="metric-name">Subscription</h3>
+                <p class="metric-value">Premier</p>
+                <div class="metric-sub">UK SO 123456 ・ Valid until Nov 24, 2023</div>
+              </article>
+            </section>
+
+            <section class="grid-bottom">
+              <article class="panel">
+                <div class="panel-head">Details</div>
+                <div class="details-row">
+                  <span class="icon-cell"><svg class="icon-16 muted-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 14s4.5-4.1 4.5-7.4A4.5 4.5 0 003.5 6.6C3.5 9.9 8 14 8 14z" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="6.4" r="1.4" stroke="currentColor" stroke-width="1.3"/></svg></span>
+                  <div>
+                    <div class="details-title">Country</div>
+                    <div class="details-sub">Ukraine</div>
+                  </div>
+                </div>
+                <div class="details-row">
+                  <span class="icon-cell"><svg class="icon-16 muted-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.8 5.8A2.8 2.8 0 015.6 3h4.8a2.8 2.8 0 012.8 2.8v4.4a2.8 2.8 0 01-2.8 2.8H5.6a2.8 2.8 0 01-2.8-2.8V5.8z" stroke="currentColor" stroke-width="1.2"/><path d="M6 8h4" stroke="currentColor" stroke-width="1.2"/></svg></span>
+                  <div>
+                    <div class="details-title">Account manager</div>
+                    <div class="details-sub">account.management@ideals3.com</div>
+                  </div>
+                </div>
+                <div class="details-row">
+                  <span class="icon-cell"><svg class="icon-16 muted-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M3.5 13c.7-2 2.3-3 4.5-3s3.8 1 4.5 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+                  <div>
+                    <div class="details-title">Business development manager</div>
+                    <div class="details-sub">anna.volfman@ideals3.com</div>
+                  </div>
+                </div>
+                <div class="details-row">
+                  <span class="icon-cell"><svg class="icon-16 muted-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 2.5a5.5 5.5 0 105.3 7h-2.2" stroke="currentColor" stroke-width="1.3"/><path d="M10.2 3.2h3v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M13.2 3.2l-2.7 2.7" stroke="currentColor" stroke-width="1.3"/></svg></span>
+                  <div>
+                    <div class="details-title">Renewal message</div>
+                    <div class="details-sub">Disabled</div>
+                  </div>
+                </div>
+              </article>
+
+              <article class="panel">
+                <div class="panel-head">
+                  <span>History</span>
+                  <span class="history-filters">
+                    <span>All activity</span>
+                    <svg class="icon-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 6.5L8 10L11.5 6.5" stroke="#2C9C74" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span>Newest</span>
+                    <svg class="icon-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 3v10M8 5v6M12 7v2" stroke="#2C9C74" stroke-width="1.3" stroke-linecap="round"/></svg>
+                  </span>
+                </div>
+
+                <div class="history-row">
+                  <div class="history-date">Nov 16, 2025</div>
+                  <div class="history-main">
+                    <span class="history-icon"><svg class="icon-16 muted-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 2l-2 4h3l-1 4 3-4H8V2z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></span>
+                    <div>
+                      <div class="history-title">Corporate account reopened</div>
+                      <div class="history-sub">candy.kang@ideals.malinator.com</div>
+                    </div>
+                  </div>
+                  <div class="status-flow">
+                    <span class="status-pill closed">
+                      <svg class="icon-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 8l2.2 2.2L12 4.5" stroke="#5F616A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      Closed
+                    </span>
+                    <svg class="icon-16 muted-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span class="status-pill active">
+                      <svg class="icon-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.8 1.8L4.5 8h2.8L6.8 14.2 11.5 7.8H8.7L8.8 1.8z" fill="#2C9C74"/></svg>
+                      Active
+                    </span>
+                  </div>
+                </div>
+
+                <div class="history-row">
+                  <div class="history-date">Nov 16, 2025</div>
+                  <div class="history-main">
+                    <span class="history-icon"><svg class="icon-16 muted-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 8l2.2 2.2L12 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    <div>
+                      <div class="history-title">Corporate account closed</div>
+                      <div class="history-sub">candy.kang@ideals.malinator.com</div>
+                    </div>
+                  </div>
+                  <div class="status-flow">
+                    <span class="status-pill frozen">
+                      <svg class="icon-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v12M4.6 4.6l6.8 6.8M11.4 4.6L4.6 11.4" stroke="#4F5AB7" stroke-width="1.2" stroke-linecap="round"/></svg>
+                      Frozen
+                    </span>
+                    <svg class="icon-16 muted-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span class="status-pill closed">
+                      <svg class="icon-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 8l2.2 2.2L12 4.5" stroke="#5F616A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      Closed
+                    </span>
+                  </div>
+                </div>
+
+                <div class="history-row">
+                  <div class="history-date">Nov 16, 2025</div>
+                  <div class="history-main">
+                    <span class="history-icon"><svg class="icon-16 muted-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v12M4.6 4.6l6.8 6.8M11.4 4.6L4.6 11.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+                    <div>
+                      <div class="history-title">Corporate account frozen</div>
+                      <div class="history-sub">candy.kang@ideals.malinator.com</div>
+                    </div>
+                  </div>
+                  <div class="status-flow">
+                    <span class="status-pill hold">
+                      <svg class="icon-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="5" stroke="#BE3A2C" stroke-width="1.3"/><path d="M8 5.3v3" stroke="#BE3A2C" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="10.8" r="0.8" fill="#BE3A2C"/></svg>
+                      On hold
+                    </span>
+                    <svg class="icon-16 muted-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span class="status-pill frozen">
+                      <svg class="icon-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v12M4.6 4.6l6.8 6.8M11.4 4.6L4.6 11.4" stroke="#4F5AB7" stroke-width="1.2" stroke-linecap="round"/></svg>
+                      Frozen
+                    </span>
+                  </div>
+                </div>
+
+                <div class="history-row">
+                  <div class="history-date">Nov 16, 2025</div>
+                  <div class="history-main">
+                    <span class="history-icon"><svg class="icon-16 muted-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.3"/><path d="M8 5.3v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="10.8" r="0.8" fill="currentColor"/></svg></span>
+                    <div>
+                      <div class="history-title">Corporate account paused</div>
+                      <div class="history-sub">candy.kang@ideals.malinator.com</div>
+                    </div>
+                  </div>
+                  <div class="status-flow">
+                    <span class="status-pill active">
+                      <svg class="icon-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.8 1.8L4.5 8h2.8L6.8 14.2 11.5 7.8H8.7L8.8 1.8z" fill="#2C9C74"/></svg>
+                      Active
+                    </span>
+                    <svg class="icon-16 muted-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span class="status-pill hold">
+                      <svg class="icon-16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="5" stroke="#BE3A2C" stroke-width="1.3"/><path d="M8 5.3v3" stroke="#BE3A2C" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="10.8" r="0.8" fill="#BE3A2C"/></svg>
+                      On hold
+                    </span>
+                  </div>
+                </div>
+              </article>
+            </section>
+          </div>
+        </main>
+      </section>
+    </div>
+
+    <script>
+      const addResolutionBtn = document.getElementById("addResolutionBtn");
+      const resolutionBlock = document.getElementById("resolutionBlock");
+      const resolutionInput = document.getElementById("resolutionInput");
+      const approveBtn = document.getElementById("approveBtn");
+      const rejectBtn = document.getElementById("rejectBtn");
+      const counter = document.getElementById("counter");
+
+      let resolutionVisible = false;
+
+      function syncState() {
+        counter.textContent = String(resolutionInput.value.length);
+        addResolutionBtn.hidden = resolutionVisible;
+        resolutionBlock.hidden = !resolutionVisible;
+      }
+
+      addResolutionBtn.addEventListener("click", () => {
+        resolutionVisible = true;
+        syncState();
+        resolutionInput.focus();
+      });
+
+      resolutionInput.addEventListener("input", syncState);
+
+      function collapseResolution() {
+        if (!resolutionVisible) return;
+        resolutionVisible = false;
+        syncState();
+      }
+
+      approveBtn.addEventListener("click", collapseResolution);
+      rejectBtn.addEventListener("click", collapseResolution);
+
+      syncState();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Codex Prototype Playbook</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f4f6fb;
+        --surface: #ffffff;
+        --text: #1f2129;
+        --muted: #5f616a;
+        --border: #dee0eb;
+        --primary: #2c9c74;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Open Sans", sans-serif;
+      }
+
+      .page {
+        margin: 0 auto;
+        max-width: 1100px;
+        padding: 36px 24px 56px;
+      }
+
+      h1 {
+        font-size: 30px;
+        line-height: 1.2;
+        margin: 0 0 10px;
+      }
+
+      .subtitle {
+        color: var(--muted);
+        margin: 0 0 24px;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+        margin-bottom: 16px;
+        padding: 18px 20px;
+      }
+
+      h2 {
+        font-size: 20px;
+        margin: 0 0 12px;
+      }
+
+      ul, ol {
+        margin: 0;
+        padding-left: 20px;
+      }
+
+      li + li {
+        margin-top: 6px;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .prompt {
+        background: #111827;
+        border-radius: 8px;
+        color: #e8f0ff;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 13px;
+        line-height: 1.45;
+        margin-top: 10px;
+        overflow-x: auto;
+        padding: 12px 14px;
+        white-space: pre-wrap;
+      }
+
+      .top-links {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      .btn-link {
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--text);
+        font-size: 14px;
+        font-weight: 600;
+        padding: 8px 12px;
+        text-decoration: none;
+      }
+
+      .btn-link:hover {
+        background: #eff3fb;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <div class="top-links">
+        <a class="btn-link" href="/">← До Dashboard</a>
+      </div>
+
+      <h1>Codex Prototype Playbook</h1>
+      <p class="subtitle">Інструкція для команди дизайнерів: як запускати прототипи в Codex так само, як у цьому проекті.</p>
+
+      <section class="card">
+        <h2>1. Обов'язкові умови</h2>
+        <ul>
+          <li>GitHub репозиторій підключений до Vercel.</li>
+          <li>У Vercel додані змінні для API реєстру прототипів (Supabase): <code>SUPABASE_URL</code>, <code>SUPABASE_SERVICE_ROLE_KEY</code>, <code>SUPABASE_TABLE</code>.</li>
+          <li>Є доступ до Figma файлів і Storybook дизайн-системи.</li>
+          <li>У локальному середовищі встановлено Node.js та npm.</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>2. Стандартний workflow</h2>
+        <ol>
+          <li>Додайте новий прототип на Dashboard через кнопку <strong>Новий прототип</strong> (назва + href + folder).</li>
+          <li>Надішліть Codex посилання на Figma node(s) і, за потреби, посилання на Storybook компонент.</li>
+          <li>Codex реалізує сторінку у відповідній папці прототипу.</li>
+          <li>Codex додає/оновлює стейти компонентів за Storybook.</li>
+          <li>Codex пушить у <code>main</code>, Vercel автоматично деплоїть.</li>
+          <li>Після перевірки змініть статус прототипу з <code>draft</code> на <code>active</code> через API/дашбордний процес.</li>
+        </ol>
+      </section>
+
+      <section class="card">
+        <h2>3. Master prompt (базовий)</h2>
+        <p class="muted">Використовуйте цей шаблон як стартове повідомлення для Codex.</p>
+        <div class="prompt">Зроби прототип за Figma 1:1 без спрощень.
+
+Figma node links:
+- [вставити лінки]
+
+Обов'язково:
+1) Використовуй стейти компонентів зі Storybook (default/hover/focus/active/disabled/error/selected).
+2) Іконки тільки з Figma/design system, без placeholder.
+3) Додай адаптивність для tablet/mobile.
+4) Після змін зроби commit + push в main.
+5) Поясни що саме оновлено і дай шлях до файлів.</div>
+      </section>
+
+      <section class="card">
+        <h2>4. Master prompt (для доопрацювання існуючого прототипу)</h2>
+        <div class="prompt">Онови існуючий прототип [назва/папка] за Figma.
+
+Вимоги:
+- Перевір всі відступи, типографіку, іконки, стейти.
+- Звір компоненти з Storybook і виправ розбіжності.
+- Не змінюй бізнес-логіку поза цією задачею.
+- Зроби responsive версію без ламання desktop.
+- Пуш в main і короткий changelog.</div>
+      </section>
+
+      <section class="card">
+        <h2>5. Правила якості (Definition of Done)</h2>
+        <ul>
+          <li>Figma fidelity: 100% (компоненти, іконки, розміри, падінги, типографіка).</li>
+          <li>Storybook states: всі релевантні стани присутні й працюють.</li>
+          <li>Responsive: desktop/tablet/mobile без поламаних блоків.</li>
+          <li>Dashboard link веде на робочий URL прототипу.</li>
+          <li>Код закомічений і задеплоєний через Vercel.</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>6. Швидкий чек-лист перед релізом</h2>
+        <ul>
+          <li>Чи співпадають тексти і лейбли 1:1 з макетом?</li>
+          <li>Чи є hover/focus/active/disabled/error стани кнопок/інпутів?</li>
+          <li>Чи не використовуються емодзі замість іконок?</li>
+          <li>Чи відкривається лінка прототипу з Dashboard без 404?</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>7. Як створити індивідуальний Dashboard для нового прототипу</h2>
+        <ol>
+          <li>Створіть окрему папку прототипу, наприклад: <code>prototype-owner-change/</code>.</li>
+          <li>Додайте в папку сторінку-дашборд <code>index.html</code> з блоками навігації по екранах вашого прототипу.</li>
+          <li>Якщо прототип має кілька сторінок, додайте внутрішні лінки, наприклад: <code>/prototype-owner-change/step-1/</code>, <code>/prototype-owner-change/step-2/</code>.</li>
+          <li>Додайте запис у головний реєстр через кнопку <strong>Новий прототип</strong> на основному Dashboard:
+            <br />
+            Назва: <code>Owner change verification flow</code>
+            <br />
+            Лінка: <code>/prototype-owner-change/</code>
+            <br />
+            Фолдер: <code>prototype-owner-change/</code>
+          </li>
+          <li>Поки сторінка не готова, залишайте статус <code>draft</code>. Після готовності переведіть у <code>active</code>.</li>
+          <li>Попросіть Codex додати/оновити індивідуальний dashboard та перевірити, що всі внутрішні лінки відкриваються без 404.</li>
+        </ol>
+        <div class="prompt">Створи індивідуальний dashboard для прототипу [назва].
+
+Потрібно:
+1) Окрема папка [folder] з index.html як точка входу.
+2) Секція \"Екрани прототипу\" з лінками на всі кроки.
+3) Блок \"Статус\" (draft/active) і короткий опис.
+4) Адаптивність desktop/tablet/mobile.
+5) Додай цей прототип у головний Dashboard реєстр (href + folder + notes).
+6) Перевір, що немає 404 і закоміть зміни.</div>
+      </section>
+
+      <section class="card">
+        <h2>8. Крок за кроком: як віддати процес іншій команді через копію репозиторію</h2>
+        <ol>
+          <li>Увімкніть шаблон репозиторію в GitHub:
+            <br />`Settings` → `General` → `Template repository` → увімкнути.</li>
+          <li>Дизайнер/команда створює свою копію:
+            <br />`Use this template` → `Create a new repository`.</li>
+          <li>Підключіть новий репозиторій до Vercel:
+            <br />`Add New` → `Project` → імпорт нового repo → `Deploy`.</li>
+          <li>У Vercel додайте env змінні:
+            <br /><code>SUPABASE_URL</code>
+            <br /><code>SUPABASE_SERVICE_ROLE_KEY</code>
+            <br /><code>SUPABASE_TABLE</code> (наприклад <code>prototypes</code>)
+          </li>
+          <li>Якщо база нова, створіть таблицю в Supabase SQL Editor:</li>
+        </ol>
+        <div class="prompt">create table if not exists public.prototypes (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  slug text not null unique,
+  status text not null default 'draft' check (status in ('draft', 'active', 'archived')),
+  folder text not null,
+  href text not null,
+  notes text not null default '',
+  created_by text not null default 'dashboard',
+  created_at timestamptz not null default now()
+);</div>
+        <ol start="6">
+          <li>Зробіть `Redeploy` у Vercel після додавання env.</li>
+          <li>Перевірте головний dashboard:
+            <br />відкрийте URL проекту, створіть тестовий запис через кнопку `Новий прототип`.</li>
+          <li>Додайте перший робочий прототип:
+            <br />`href`: <code>/prototype-name/</code>, `folder`: <code>prototype-name/</code>.
+          </li>
+          <li>Перевірте, що лінка відкривається без 404 і лише після цього ставте статус `active`.</li>
+        </ol>
+      </section>
+
+      <section class="card">
+        <h2>9. Troubleshooting (симптом → причина → рішення)</h2>
+        <ul>
+          <li><strong>404 NOT_FOUND на лінці прототипу</strong> → папка/роут не існує або неправильний `href` → створіть `index.html` у правильному folder і звірте `href` у реєстрі.</li>
+          <li><strong>Dashboard в read-only fallback</strong> → API не бачить Supabase env → перевірте `SUPABASE_*` у Vercel і зробіть redeploy.</li>
+          <li><strong>Push відхилено через workflow scope</strong> → GitHub PAT без `workflow` scope → створіть новий PAT з `repo` + `workflow`, оновіть креденшали.</li>
+          <li><strong>Компоненти не схожі на макет</strong> → пропущені стейти зі Storybook → вимагайте повний набір state: default/hover/focus/active/disabled/error/selected.</li>
+          <li><strong>Codex не бачить Figma</strong> → немає токена або доступу до файлу → перевірте Figma token та права на конкретний файл/node.</li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>

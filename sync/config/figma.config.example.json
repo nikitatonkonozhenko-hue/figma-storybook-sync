@@ -1,0 +1,9 @@
+{
+  "fileKey": "REPLACE_WITH_FIGMA_FILE_KEY",
+  "teamId": "OPTIONAL_TEAM_ID",
+  "entryNodeIds": [
+    "0:1"
+  ],
+  "tokenOutputPath": "src/tokens/generated.css",
+  "componentMapPath": "sync/mappings/component-map.json"
+}

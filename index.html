@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prototype Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f4f6fb;
+        --surface: #ffffff;
+        --text: #1f2129;
+        --muted: #5f616a;
+        --border: #dee0eb;
+        --primary: #2c9c74;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Open Sans", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      .dashboard {
+        box-sizing: border-box;
+        margin: 0 auto;
+        max-width: 1200px;
+        min-height: 100vh;
+        padding: 36px 24px;
+      }
+
+      h1 {
+        font-size: 28px;
+        line-height: 1.2;
+        margin: 0 0 10px;
+      }
+
+      .subtitle {
+        color: var(--muted);
+        margin: 0 0 24px;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+      }
+
+      .toolbar {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 14px;
+      }
+
+      .toolbar-left {
+        align-items: center;
+        display: flex;
+        gap: 10px;
+      }
+
+      .toolbar-doc-link {
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--text);
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 18px;
+        padding: 6px 10px;
+        text-decoration: none;
+      }
+
+      .toolbar-doc-link:hover {
+        background: #eef2fa;
+        text-decoration: none;
+      }
+
+      .btn {
+        background: var(--primary);
+        border: 0;
+        border-radius: 6px;
+        color: #fff;
+        cursor: pointer;
+        font: 600 14px/20px "Open Sans", sans-serif;
+        padding: 10px 14px;
+      }
+
+      .btn-danger {
+        background: #ef4444;
+        color: #fff;
+      }
+
+      .btn-mini {
+        border-radius: 6px;
+        font: 600 12px/16px "Open Sans", sans-serif;
+        padding: 6px 9px;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      th,
+      td {
+        border-bottom: 1px solid var(--border);
+        font-size: 14px;
+        line-height: 20px;
+        padding: 14px 16px;
+        text-align: left;
+        vertical-align: middle;
+      }
+
+      th {
+        background: #fafbfe;
+        font-weight: 600;
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      a {
+        color: var(--primary);
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .badge {
+        background: #ebf8ef;
+        border: 1px solid #cdecd8;
+        border-radius: 999px;
+        color: #1f7f5c;
+        display: inline-block;
+        font-size: 12px;
+        line-height: 16px;
+        padding: 2px 8px;
+      }
+
+      .note {
+        color: var(--muted);
+        font-size: 13px;
+        margin-top: 14px;
+      }
+
+      .alert {
+        border-radius: 8px;
+        font-size: 13px;
+        margin-top: 12px;
+        padding: 10px 12px;
+      }
+
+      .alert.is-warning {
+        background: #fff7e5;
+        border: 1px solid #f0d9a1;
+        color: #6a4d00;
+      }
+
+      .alert.is-success {
+        background: #e9f8ef;
+        border: 1px solid #bde6cc;
+        color: #0f6b3f;
+      }
+
+      .modal-backdrop {
+        align-items: center;
+        background: rgba(0, 0, 0, 0.44);
+        display: none;
+        inset: 0;
+        justify-content: center;
+        position: fixed;
+        z-index: 1000;
+      }
+
+      .modal-backdrop.is-open {
+        display: flex;
+      }
+
+      .modal {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        max-width: 520px;
+        padding: 18px;
+        width: calc(100% - 32px);
+      }
+
+      .modal h2 {
+        margin: 0 0 12px;
+      }
+
+      .field {
+        display: grid;
+        gap: 6px;
+        margin-bottom: 12px;
+      }
+
+      .field label {
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .field input {
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font: 400 14px/20px "Open Sans", sans-serif;
+        padding: 10px 12px;
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+
+      .btn-secondary {
+        background: #eef1f6;
+        color: #1f2129;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="dashboard">
+      <h1>Prototype Dashboard</h1>
+      <p class="subtitle">Єдина точка входу для всіх прототипів у репозиторії.</p>
+
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <div class="muted">Реєстр прототипів</div>
+          <a class="toolbar-doc-link" href="/docs/codex-prototype-playbook.html" target="_blank" rel="noopener noreferrer">Інструкція Codex</a>
+        </div>
+        <button type="button" class="btn" id="add-prototype-btn">Новий прототип</button>
+      </div>
+
+      <section class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Prototype</th>
+              <th>Status</th>
+              <th>Folder</th>
+              <th>Link</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="prototype-rows"></tbody>
+        </table>
+      </section>
+      <p class="note">
+        Основний список: API <code>/api/prototypes</code>. Якщо API недоступний, dashboard читає fallback з
+        <code>/prototypes.json</code> у read-only режимі.
+      </p>
+      <div id="dashboard-alert"></div>
+    </main>
+
+    <div class="modal-backdrop" id="prototype-modal" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="prototype-modal-title">
+        <h2 id="prototype-modal-title">Новий прототип</h2>
+        <form id="prototype-form">
+          <div class="field">
+            <label for="prototype-name">Назва</label>
+            <input id="prototype-name" name="name" placeholder="Наприклад: Usecase selector v2" required />
+          </div>
+          <div class="field">
+            <label for="prototype-link">Лінка</label>
+            <input id="prototype-link" name="href" placeholder="/prototype-v2/" required />
+          </div>
+          <div class="field">
+            <label for="prototype-folder">Фолдер (опційно)</label>
+            <input id="prototype-folder" name="folder" placeholder="prototype-v2/" />
+          </div>
+          <div class="field">
+            <label for="prototype-notes">Нотатки (опційно)</label>
+            <input id="prototype-notes" name="notes" placeholder="Коротко про варіант" />
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" id="prototype-cancel">Скасувати</button>
+            <button type="submit" class="btn">Додати</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const defaultPrototypes = [];
+
+      const rows = document.getElementById("prototype-rows");
+      const addBtn = document.getElementById("add-prototype-btn");
+      const modal = document.getElementById("prototype-modal");
+      const form = document.getElementById("prototype-form");
+      const cancelBtn = document.getElementById("prototype-cancel");
+      const alertBox = document.getElementById("dashboard-alert");
+
+      function showAlert(message, type) {
+        if (!message) {
+          alertBox.innerHTML = "";
+          return;
+        }
+        alertBox.innerHTML = `<div class="alert ${type === "success" ? "is-success" : "is-warning"}">${message}</div>`;
+      }
+
+      let prototypes = [...defaultPrototypes];
+      let apiEnabled = false;
+
+      function renderTable(items) {
+        const normalizeHref = (href) => {
+          const value = String(href || "").trim();
+          if (!value) return "/";
+          const withPrefix = value.startsWith("/") ? value : `/${value}`;
+          return withPrefix.endsWith("/") ? withPrefix : `${withPrefix}/`;
+        };
+
+        const deriveSlug = (item) => {
+          if (item.slug) return String(item.slug);
+          return normalizeHref(item.href).replace(/^\/|\/$/g, "");
+        };
+
+        const resolveLink = (item) => {
+          const href = normalizeHref(item.href);
+          if ((item.status || "").toLowerCase() === "draft") {
+            return `/prototype-stub/?slug=${encodeURIComponent(deriveSlug(item))}`;
+          }
+          return href;
+        };
+
+        rows.innerHTML = items
+          .map(
+            (item) => `
+              <tr>
+                <td>${item.name}</td>
+                <td><span class="badge">${item.status || "active"}</span></td>
+                <td><span class="muted">${item.folder || "-"}</span></td>
+                <td><a href="${resolveLink(item)}" target="_blank" rel="noopener noreferrer">${item.name}</a></td>
+                <td>${item.notes || ""}</td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-mini"
+                    data-action="delete-prototype"
+                    data-id="${item.id || ""}"
+                    ${item.id ? "" : "disabled title='Недоступно у fallback режимі'"}
+                  >
+                    Видалити
+                  </button>
+                </td>
+              </tr>
+            `
+          )
+          .join("");
+      }
+
+      async function loadSharedPrototypes() {
+        showAlert("", "warning");
+        try {
+          const apiResponse = await fetch("/api/prototypes", { cache: "no-store" });
+          if (apiResponse.ok) {
+            const apiData = await apiResponse.json();
+            prototypes = Array.isArray(apiData?.items) ? apiData.items : [];
+            apiEnabled = true;
+            renderTable(prototypes);
+            return;
+          }
+          throw new Error("API unavailable");
+        } catch {
+          apiEnabled = false;
+        }
+
+        try {
+          const fallbackResponse = await fetch("/prototypes.json", { cache: "no-store" });
+          if (!fallbackResponse.ok) throw new Error("Fallback unavailable");
+          const fallbackData = await fallbackResponse.json();
+          prototypes = Array.isArray(fallbackData) ? fallbackData : [];
+          renderTable(prototypes);
+          showAlert(
+            "API недоступний або не налаштований. Показую fallback з prototypes.json (read-only).",
+            "warning"
+          );
+        } catch {
+          prototypes = [...defaultPrototypes];
+          renderTable(prototypes);
+          showAlert("Не вдалося завантажити реєстр прототипів.", "warning");
+        }
+      }
+
+      function openModal() {
+        modal.classList.add("is-open");
+        modal.setAttribute("aria-hidden", "false");
+        document.getElementById("prototype-name").focus();
+      }
+
+      function closeModal() {
+        modal.classList.remove("is-open");
+        modal.setAttribute("aria-hidden", "true");
+        form.reset();
+      }
+
+      addBtn.addEventListener("click", openModal);
+      cancelBtn.addEventListener("click", closeModal);
+      modal.addEventListener("click", (event) => {
+        if (event.target === modal) closeModal();
+      });
+
+      document.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-action='delete-prototype']");
+        if (!button) return;
+
+        const id = button.getAttribute("data-id");
+        if (!id) return;
+
+        if (!apiEnabled) {
+          showAlert("API недоступний. Видалення можливе лише при активному API.", "warning");
+          return;
+        }
+
+        const ok = window.confirm("Видалити цей прототип з реєстру?");
+        if (!ok) return;
+
+        fetch("/api/prototypes", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id }),
+        })
+          .then(async (response) => {
+            if (!response.ok) {
+              const errorPayload = await response.json().catch(() => ({}));
+              throw new Error(errorPayload.error || "Failed to delete prototype");
+            }
+            await loadSharedPrototypes();
+            showAlert("Прототип видалено.", "success");
+          })
+          .catch((error) => {
+            showAlert(`Помилка видалення: ${error.message}`, "warning");
+          });
+      });
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const formData = new FormData(form);
+        const name = String(formData.get("name") || "").trim();
+        const href = String(formData.get("href") || "").trim();
+        const folderRaw = String(formData.get("folder") || "").trim();
+        const notes = String(formData.get("notes") || "").trim();
+
+        if (!name || !href) return;
+
+        const folder = folderRaw || href.replace(/^\//, "");
+        const payload = { name, href, folder, notes, status: "draft" };
+
+        if (!apiEnabled) {
+          showAlert(
+            "API зараз недоступний. Щоб зберігати нові прототипи спільно, налаштуй Supabase env у Vercel.",
+            "warning"
+          );
+          return;
+        }
+
+        fetch("/api/prototypes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        })
+          .then(async (response) => {
+            if (!response.ok) {
+              const errorPayload = await response.json().catch(() => ({}));
+              throw new Error(errorPayload.error || "Failed to create prototype");
+            }
+            await loadSharedPrototypes();
+            closeModal();
+            showAlert("Новий прототип успішно створено в спільному реєстрі.", "success");
+          })
+          .catch((error) => {
+            showAlert(`Помилка створення: ${error.message}`, "warning");
+          });
+      });
+
+      loadSharedPrototypes();
+    </script>
+  </body>
+</html>

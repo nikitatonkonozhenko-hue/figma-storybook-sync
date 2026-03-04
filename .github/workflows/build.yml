@@ -1,0 +1,146 @@
+name: Build and Upload Artifact
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies (if Node project)
+        shell: bash
+        run: |
+          if [ -f package.json ]; then
+            if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ]; then
+              npm ci
+            else
+              npm install
+            fi
+          else
+            echo "No package.json found. Skipping dependency installation."
+          fi
+
+      - name: Build (if build script exists)
+        shell: bash
+        run: |
+          if [ -f package.json ]; then
+            if node -e "const p=require('./package.json'); process.exit(p.scripts&&p.scripts.build?0:1)"; then
+              npm run build
+            else
+              echo "No build script in package.json. Skipping build step."
+            fi
+          else
+            echo "No Node build configured in this repository."
+          fi
+
+      - name: Install Playwright browsers
+        if: hashFiles('package.json') != ''
+        shell: bash
+        run: npx playwright install --with-deps chromium
+
+      - name: Generate prototype use-case config
+        if: hashFiles('package.json') != ''
+        run: npm run generate:usecases
+
+      - name: Visual compare with Figma
+        id: visual_compare
+        if: hashFiles('package.json') != '' && secrets.FIGMA_ACCESS_TOKEN != ''
+        continue-on-error: true
+        env:
+          FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }}
+          VISUAL_MAX_DIFF_RATIO: "0.03"
+        run: npm run test:visual
+
+      - name: Auto-fix visual mismatches
+        if: steps.visual_compare.outcome == 'failure'
+        run: npm run autofix:visual
+
+      - name: Re-run visual compare after auto-fix
+        id: visual_compare_after_fix
+        if: steps.visual_compare.outcome == 'failure'
+        continue-on-error: true
+        env:
+          FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }}
+          VISUAL_MAX_DIFF_RATIO: "0.03"
+        run: npm run test:visual
+
+      - name: Detect autofix changes
+        id: autofix_changes
+        if: steps.visual_compare.outcome == 'failure'
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create pull request with auto-fix
+        if: steps.visual_compare.outcome == 'failure' && steps.autofix_changes.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: autofix/visual-${{ github.run_id }}
+          title: "Auto-fix: align prototype with visual regression"
+          commit-message: "Auto-fix visual regression mismatches"
+          body: |
+            This PR was created automatically after visual regression failed.
+
+            Applied deterministic fixes:
+            - regenerated prototype use-case config from source mapping
+
+            Please review and merge if expected.
+          labels: |
+            automated
+            visual-regression
+
+      - name: Skip visual compare (missing FIGMA_ACCESS_TOKEN)
+        if: hashFiles('package.json') != '' && secrets.FIGMA_ACCESS_TOKEN == ''
+        run: echo "FIGMA_ACCESS_TOKEN secret is not set. Skipping visual compare."
+
+      - name: Upload visual diff artifacts
+        if: always() && hashFiles('tests/visual/.artifacts/**') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diff-artifacts
+          path: tests/visual/.artifacts
+
+      - name: Fail job if visual compare is still failing after auto-fix
+        if: steps.visual_compare.outcome == 'failure' && steps.visual_compare_after_fix.outcome == 'failure'
+        run: |
+          echo "Visual regression still failing after auto-fix. See visual-diff-artifacts."
+          exit 1
+
+      - name: Prepare artifact path
+        id: artifact
+        shell: bash
+        run: |
+          if [ -d dist ]; then
+            echo "path=dist" >> "$GITHUB_OUTPUT"
+          elif [ -d build ]; then
+            echo "path=build" >> "$GITHUB_OUTPUT"
+          elif [ -d prototype ]; then
+            echo "path=prototype" >> "$GITHUB_OUTPUT"
+          else
+            echo "path=." >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: ${{ steps.artifact.outputs.path }}

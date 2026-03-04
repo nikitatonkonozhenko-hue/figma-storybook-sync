@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prototype Draft</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        font-family: "Open Sans", sans-serif;
+        background: #f4f6fb;
+      }
+      .wrap {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 24px;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid #dee0eb;
+        border-radius: 10px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        max-width: 760px;
+        padding: 28px;
+        width: 100%;
+      }
+      h1 {
+        color: #1f2129;
+        margin: 0 0 8px;
+      }
+      .meta {
+        color: #5f616a;
+        margin: 0 0 6px;
+      }
+      .note {
+        background: #fff7e5;
+        border: 1px solid #f0d9a1;
+        border-radius: 8px;
+        color: #6a4d00;
+        margin: 16px 0 0;
+        padding: 12px 14px;
+      }
+      .actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 18px;
+      }
+      .btn {
+        background: #2c9c74;
+        border: 0;
+        border-radius: 6px;
+        color: #fff;
+        cursor: pointer;
+        display: inline-block;
+        font: 600 14px/20px "Open Sans", sans-serif;
+        padding: 10px 14px;
+        text-decoration: none;
+      }
+      .btn-secondary {
+        background: #eef1f6;
+        color: #1f2129;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <section class="card">
+        <h1 id="title">Draft prototype</h1>
+        <p class="meta"><strong>Status:</strong> <span id="status">draft</span></p>
+        <p class="meta"><strong>Slug:</strong> <span id="slug"></span></p>
+        <p class="meta"><strong>Target link:</strong> <span id="href"></span></p>
+        <p class="meta"><strong>Notes:</strong> <span id="notes">-</span></p>
+        <div class="note">
+          Це чернетковий запис. Реальний фолдер прототипу може ще не бути доданий у репозиторій, тому прямий перехід
+          часто дає 404.
+        </div>
+        <div class="actions">
+          <a class="btn btn-secondary" href="/">Повернутись до dashboard</a>
+          <a class="btn" id="open-target" target="_blank" rel="noopener noreferrer" href="/">Відкрити target link</a>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const titleEl = document.getElementById("title");
+      const statusEl = document.getElementById("status");
+      const slugEl = document.getElementById("slug");
+      const hrefEl = document.getElementById("href");
+      const notesEl = document.getElementById("notes");
+      const openTargetEl = document.getElementById("open-target");
+
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get("slug") || "";
+      slugEl.textContent = slug || "-";
+
+      function normalizeHref(href) {
+        const value = String(href || "").trim();
+        if (!value) return "/";
+        const withPrefix = value.startsWith("/") ? value : `/${value}`;
+        return withPrefix.endsWith("/") ? withPrefix : `${withPrefix}/`;
+      }
+
+      function applyItem(item) {
+        if (!item) return;
+        const targetHref = normalizeHref(item.href);
+        titleEl.textContent = item.name || "Draft prototype";
+        statusEl.textContent = item.status || "draft";
+        hrefEl.textContent = targetHref;
+        notesEl.textContent = item.notes || "-";
+        openTargetEl.href = targetHref;
+      }
+
+      async function load() {
+        try {
+          const apiResponse = await fetch("/api/prototypes", { cache: "no-store" });
+          if (apiResponse.ok) {
+            const apiData = await apiResponse.json();
+            const items = Array.isArray(apiData?.items) ? apiData.items : [];
+            const item = items.find((entry) => String(entry.slug || "") === slug);
+            if (item) return applyItem(item);
+          }
+        } catch {
+          // fallback below
+        }
+
+        try {
+          const fallbackResponse = await fetch("/prototypes.json", { cache: "no-store" });
+          if (!fallbackResponse.ok) return;
+          const fallbackItems = await fallbackResponse.json();
+          const items = Array.isArray(fallbackItems) ? fallbackItems : [];
+          const item = items.find((entry) => normalizeHref(entry.href).replace(/^\/|\/$/g, "") === slug);
+          applyItem(item);
+        } catch {
+          // no-op
+        }
+      }
+
+      load();
+    </script>
+  </body>
+</html>
